@@ -4,6 +4,10 @@ namespace LegacyApp
 {
     public class UserService(IClientRepository clientRepository, IUserCreditService userCreditService)
     {
+        public UserService() : this(new ClientRepository(), new UserCreditService())
+        {
+        }
+
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
             if (Validate(firstName, lastName, email, dateOfBirth) == false)
@@ -36,7 +40,7 @@ namespace LegacyApp
             return true;
         }
 
-        private bool Validate(string firstName, string lastName, string email, DateTime dateOfBirth)
+        private static bool Validate(string firstName, string lastName, string email, DateTime dateOfBirth)
         {
             if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
             {
@@ -48,12 +52,7 @@ namespace LegacyApp
                 return false;
             }
 
-            if (GetAge(dateOfBirth) < 21)
-            {
-                return false;
-            }
-            
-            return true;
+            return GetAge(dateOfBirth) >= 21;
         }
         
         private static int GetAge(DateTime dateOfBirth)
