@@ -1,67 +1,44 @@
 ﻿using System;
 
-namespace LegacyApp
+namespace LegacyApp;
+
+public class UserService(
+    IClientRepository clientRepository,
+    IUserCreditService userCreditService,
+    IUserValidator userValidator)
 {
-    public class UserService(IClientRepository clientRepository, IUserCreditService userCreditService)
+    public UserService() : this(new ClientRepository(), new UserCreditService(), new UserValidator())
     {
-        public UserService() : this(new ClientRepository(), new UserCreditService())
+    }
+
+    public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
+    {
+        var user = new User
         {
+            DateOfBirth = dateOfBirth,
+            EmailAddress = email,
+            FirstName = firstName,
+            LastName = lastName
+        };
+
+        if (userValidator.Validate(user) == false)
+        {
+            return false;
         }
 
-        public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
+        user.Client = clientRepository.GetById(clientId);
+
+        if (user.Client.Type != ClientType.VeryImportantClient)
         {
-            if (Validate(firstName, lastName, email, dateOfBirth) == false)
-            {
-                return false;
-            }
-
-            var client = clientRepository.GetById(clientId);
-
-            var user = new User
-            {
-                Client = client,
-                DateOfBirth = dateOfBirth,
-                EmailAddress = email,
-                FirstName = firstName,
-                LastName = lastName
-            };
-
-            if (user.HasCreditLimit)
-            {
-                user.CreditLimit = userCreditService.GetCreditLimit(user);
-            }
-            
-            if (user.CreditLimit < 500)
-            {
-                return false;
-            }
-
-            UserDataAccess.AddUser(user);
-            return true;
+            user.CreditLimit = userCreditService.GetCreditLimit(user);
         }
 
-        private static bool Validate(string firstName, string lastName, string email, DateTime dateOfBirth)
+        if (userValidator.ValidateCredit(user) == false)
         {
-            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
-            {
-                return false;
-            }
-
-            if (email.Contains('@') == false || email.Contains('.') == false)
-            {
-                return false;
-            }
-
-            return GetAge(dateOfBirth) >= 21;
+            return false;
         }
-        
-        private static int GetAge(DateTime dateOfBirth)
-        {
-            var now = DateTime.Now;
-            var age = now.Year - dateOfBirth.Year;
-            if (now.Month < dateOfBirth.Month || (now.Month == dateOfBirth.Month && now.Day < dateOfBirth.Day)) age--;
-           
-            return dateOfBirth < now.AddYears(-age) ? age : age - 1;
-        }
+
+        UserDataAccess.AddUser(user);
+        return true;
     }
 }

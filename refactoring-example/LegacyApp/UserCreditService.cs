@@ -33,15 +33,20 @@ namespace LegacyApp
 
         public int GetCreditLimit(User user)
         {
-            return user.Client.Type switch
-            {
-                ClientType.VeryImportantClient => throw new ArgumentException(
-                    nameof(ClientType.VeryImportantClient) + " has no credit limit"),
-                ClientType.ImportantClient => GetCreditLimit(user.LastName, user.DateOfBirth) *
-                                              ImportantClientCreditMultiplier,
-                ClientType.NormalClient => GetCreditLimit(user.LastName, user.DateOfBirth),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            return user.Client.Type
+                switch
+                {
+                    ClientType.VeryImportantClient =>
+                        throw new ArgumentException(
+                            nameof(ClientType.VeryImportantClient) + " has no credit limit"),
+                    
+                    ClientType.ImportantClient => GetCreditLimit(user.LastName, user.DateOfBirth) *
+                                                  ImportantClientCreditMultiplier,
+                    
+                    ClientType.NormalClient => GetCreditLimit(user.LastName, user.DateOfBirth),
+                    
+                    _ => throw new ArgumentOutOfRangeException(nameof(user.Client.Type))
+                };
         }
 
         /// <summary>
