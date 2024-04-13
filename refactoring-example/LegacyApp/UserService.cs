@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http.Headers;
 
 namespace LegacyApp
 {
@@ -24,11 +23,7 @@ namespace LegacyApp
                 LastName = lastName
             };
 
-            if (client.Type == "VeryImportantClient")
-            {
-                user.HasCreditLimit = false;
-            }
-            else if (client.Type == "ImportantClient")
+            if (client.Type == ClientType.ImportantClient)
             {
                 using (var userCreditService = new UserCreditService())
                 {
@@ -39,7 +34,6 @@ namespace LegacyApp
             }
             else
             {
-                user.HasCreditLimit = true;
                 using (var userCreditService = new UserCreditService())
                 {
                     int creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
