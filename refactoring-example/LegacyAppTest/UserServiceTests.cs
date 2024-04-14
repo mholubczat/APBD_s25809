@@ -35,7 +35,9 @@ public class UserServiceTests
         Address = "Jungle",
         Type = ClientType.NormalClient
     };
-    
+
+    private readonly DateTime _dateOfBirth = new(1980,1,1);
+
     [Test]
     [TestCase("", "Rambo", false)]
     [TestCase(null, "Rambo", false)]
@@ -46,10 +48,9 @@ public class UserServiceTests
     {
         //Arrange
         SetupMocksToReturnClientWithCredit(_johnRambo, 1000);
-        var dateOfBirth = new DateTime(1980, 1, 1);
         
         // Act
-        var isUserAdded = _userService.AddUser(firstName, lastName, _johnRambo.Email, dateOfBirth, _johnRambo.ClientId);
+        var isUserAdded = _userService.AddUser(firstName, lastName, _johnRambo.Email, _dateOfBirth, _johnRambo.ClientId);
         
         // Assert
         Assert.That(result, Is.EqualTo(isUserAdded));
@@ -79,10 +80,9 @@ public class UserServiceTests
     {
         //Arrange
         SetupMocksToReturnClientWithCredit(_johnRambo, 1000);
-        var dateOfBirth = new DateTime(1980, 1, 1);
         
         // Act
-        var isUserAdded = _userService.AddUser("John", "Rambo", email, dateOfBirth, _johnRambo.ClientId);
+        var isUserAdded = _userService.AddUser("John", "Rambo", email, _dateOfBirth, _johnRambo.ClientId);
         
         // Assert
         Assert.That(result, Is.EqualTo(isUserAdded));
@@ -95,10 +95,34 @@ public class UserServiceTests
     {
         //Arrange
         SetupMocksToReturnClientWithCredit(_johnRambo, credit);
-        var dateOfBirth = new DateTime(1980, 1, 1);
         
         // Act
-        var isUserAdded = _userService.AddUser("John", "Rambo", _johnRambo.Email, dateOfBirth, _johnRambo.ClientId);
+        var isUserAdded = _userService.AddUser("John", "Rambo", _johnRambo.Email, _dateOfBirth, _johnRambo.ClientId);
+        
+        // Assert
+        Assert.That(result, Is.EqualTo(isUserAdded));
+    }
+    
+    [Test]
+    [TestCase(ClientType.NormalClient, false)]
+    [TestCase(ClientType.ImportantClient, true)]
+    [TestCase(ClientType.VeryImportantClient, true)]
+    public void AddUser_ImportantClients_ShouldReturnTrue(ClientType type, bool result)
+    {
+        //Arrange
+        var client = new Client
+        {
+            Name = _johnRambo.Name,
+            ClientId = _johnRambo.ClientId,
+            Email = _johnRambo.Email,
+            Address = _johnRambo.Address,
+            Type = type
+        };
+        
+        SetupMocksToReturnClientWithCredit(client, 0);
+        
+        // Act
+        var isUserAdded = _userService.AddUser("John", "Rambo", _johnRambo.Email, _dateOfBirth, _johnRambo.ClientId);
         
         // Assert
         Assert.That(result, Is.EqualTo(isUserAdded));
