@@ -87,4 +87,20 @@ public class UserServiceTests
         // Assert
         Assert.That(result, Is.EqualTo(isUserAdded));
     }
+    
+    [Test]
+    [TestCase(499, false)]
+    [TestCase(500, true)]
+    public void AddUser_InsufficientCredit_ShouldReturnFalse(int credit, bool result)
+    {
+        //Arrange
+        SetupMocksToReturnClientWithCredit(_johnRambo, credit);
+        var dateOfBirth = new DateTime(1980, 1, 1);
+        
+        // Act
+        var isUserAdded = _userService.AddUser("John", "Rambo", _johnRambo.Email, dateOfBirth, _johnRambo.ClientId);
+        
+        // Assert
+        Assert.That(result, Is.EqualTo(isUserAdded));
+    }
 }
