@@ -6,6 +6,8 @@ public static class Configuration
 
     public static IEndpointRouteBuilder RegisterEndpoints(this IEndpointRouteBuilder endpoints)
     {
+        endpoints.MapGet(BaseEndpoint,
+            (IAnimalsService service) => TypedResults.Ok(service.GetAnimals()));
         endpoints.MapGet(BaseEndpoint + "/{orderBy:alpha}",
             (IAnimalsService service, string? orderBy) => TypedResults.Ok(service.GetAnimals(orderBy)));
         endpoints.MapPost(BaseEndpoint,
