@@ -2,7 +2,8 @@ namespace Animals;
 
 public interface IAnimalsService
 {
-    IList<Animal> GetAnimals(string? orderBy = null);
+    private const string DefaultOrdering = "name";
+    IList<Animal> GetAnimals(string orderBy = DefaultOrdering);
     int CreateAnimal(Animal animal);
     int UpdateAnimal(Animal animal);
     void DeleteAnimal(int id);
@@ -10,7 +11,7 @@ public interface IAnimalsService
 
 public class AnimalsService(IAnimalsRepository repository) : IAnimalsService
 {
-    public IList<Animal> GetAnimals(string? orderBy)
+    public IList<Animal> GetAnimals(string orderBy)
     {
         return repository.GetAnimals(orderBy);
     }
