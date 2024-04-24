@@ -40,7 +40,7 @@ public class AnimalsController(IAnimalsService animalsService) : ControllerBase
 
         if (affectedRows == 0)
         {
-            NotFound(GetNotFoundMessage(id));
+            return NotFound(GetNotFoundMessage(id));
         }
 
         return NoContent();
@@ -59,7 +59,7 @@ public class AnimalsController(IAnimalsService animalsService) : ControllerBase
 
         if (affectedRows == 0)
         {
-            NotFound(GetNotFoundMessage(id));
+            return NotFound(GetNotFoundMessage(id));
         }
 
         animalsService.DeleteAnimal(id);
