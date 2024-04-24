@@ -4,20 +4,20 @@ namespace Animals;
 
 public class Animal
 {
-    public long Id { get; set; }
-    
+    public int Id { get; set; }
+
     [Required]
     [MaxLength(200)]
-    public string Name { get; init; }
-    
+    public required string Name { get; init; }
+
     [MaxLength(200)]
     public string? Description { get; init; }
-    
+
     [Required]
     [MaxLength(200)]
-    public string Category { get; init; }
-    
+    public required string Category { get; init; }
+
     [Required]
     [MaxLength(200)]
-    public string Area { get; init; }
+    public required string Area { get; init; }
 }

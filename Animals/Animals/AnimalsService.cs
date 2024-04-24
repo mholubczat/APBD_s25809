@@ -2,18 +2,18 @@ namespace Animals;
 
 public interface IAnimalsService
 {
-    private const string DefaultOrdering = "name";
-    IList<Animal> GetAnimals(string orderBy = DefaultOrdering);
+    IEnumerable<Animal> GetAnimals(string? orderBy);
     int CreateAnimal(Animal animal);
     int UpdateAnimal(Animal animal);
-    void DeleteAnimal(int id);
+    int DeleteAnimal(int id);
 }
 
 public class AnimalsService(IAnimalsRepository repository) : IAnimalsService
 {
-    public IList<Animal> GetAnimals(string orderBy)
+    private const string DefaultOrdering = "name";
+    public IEnumerable<Animal> GetAnimals(string? orderBy)
     {
-        return repository.GetAnimals(orderBy);
+        return repository.GetAnimals(orderBy ?? DefaultOrdering);
     }
 
     public int CreateAnimal(Animal animal)
@@ -26,8 +26,8 @@ public class AnimalsService(IAnimalsRepository repository) : IAnimalsService
         return repository.UpdateAnimal(animal);
     }
 
-    public void DeleteAnimal(int id)
+    public int DeleteAnimal(int id)
     {
-        repository.DeleteAnimal(id);
+        return repository.DeleteAnimal(id);
     }
 }
