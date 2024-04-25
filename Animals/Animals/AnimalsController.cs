@@ -7,7 +7,7 @@ namespace Animals;
 public class AnimalsController(IAnimalsService animalsService) : ControllerBase
 {
     [HttpGet]
-    public IActionResult GetAnimals(string? orderBy)
+    public async Task<IActionResult> GetAnimals(string? orderBy)
     {
         var validationOutcome = Validate(orderBy);
         if (validationOutcome.isValid == false)
@@ -15,19 +15,19 @@ public class AnimalsController(IAnimalsService animalsService) : ControllerBase
             return BadRequest(validationOutcome.reason);
         }
 
-        var animals = animalsService.GetAnimals(orderBy);
+        var animals = await animalsService.GetAnimals(orderBy);
         return Ok(animals);
     }
 
     [HttpPost]
-    public IActionResult CreateAnimal(Animal animal)
+    public async Task<IActionResult> CreateAnimal(Animal animal)
     {
-        animalsService.CreateAnimal(animal);
+        await animalsService.CreateAnimal(animal);
         return StatusCode(StatusCodes.Status201Created);
     }
 
     [HttpPut("{id:int}")]
-    public IActionResult UpdateAnimal(int id, Animal animal)
+    public async Task<IActionResult> UpdateAnimal(int id, Animal animal)
     {
         var validationOutcome = Validate(id);
         if (validationOutcome.isValid == false)
@@ -36,7 +36,7 @@ public class AnimalsController(IAnimalsService animalsService) : ControllerBase
         }
 
         animal.Id = id;
-        var affectedRows = animalsService.UpdateAnimal(animal);
+        var affectedRows = await animalsService.UpdateAnimal(animal);
 
         if (affectedRows == 0)
         {
@@ -47,7 +47,7 @@ public class AnimalsController(IAnimalsService animalsService) : ControllerBase
     }
 
     [HttpDelete("id:int")]
-    public IActionResult DeleteAnimal(int id)
+    public async Task<IActionResult> DeleteAnimal(int id)
     {
         var validationOutcome = Validate(id);
         if (validationOutcome.isValid == false)
@@ -55,14 +55,13 @@ public class AnimalsController(IAnimalsService animalsService) : ControllerBase
             return BadRequest(validationOutcome.reason);
         }
 
-        var affectedRows = animalsService.DeleteAnimal(id);
+        var affectedRows = await animalsService.DeleteAnimal(id);
 
         if (affectedRows == 0)
         {
             return NotFound(GetNotFoundMessage(id));
         }
 
-        animalsService.DeleteAnimal(id);
         return NoContent();
     }
 

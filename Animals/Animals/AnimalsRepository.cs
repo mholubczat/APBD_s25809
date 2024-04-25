@@ -4,10 +4,10 @@ namespace Animals;
 
 public interface IAnimalsRepository
 {
-    IEnumerable<Animal> GetAnimals(string orderBy);
-    int CreateAnimal(Animal animal);
-    int UpdateAnimal(Animal animal);
-    int DeleteAnimal(int id);
+    Task<IEnumerable<Animal>> GetAnimals(string orderBy);
+    Task<int> CreateAnimal(Animal animal);
+    Task<int> UpdateAnimal(Animal animal);
+    Task<int> DeleteAnimal(int id);
 }
 
 public class AnimalsRepository : IAnimalsRepository
@@ -23,7 +23,7 @@ public class AnimalsRepository : IAnimalsRepository
     private void Initialize()
     {
         using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
-        con.Open();
+        con.OpenAsync();
 
         using var cmd = new SqlCommand();
         cmd.Connection = con;
@@ -40,7 +40,7 @@ public class AnimalsRepository : IAnimalsRepository
                           END;
                           """;
 
-        cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQueryAsync();
 
         cmd.CommandText = """
                           IF (SELECT COUNT(1) FROM Animal) = 0
@@ -70,24 +70,24 @@ public class AnimalsRepository : IAnimalsRepository
                               END;
                           """;
 
-        cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQueryAsync();
     }
 
-    public IEnumerable<Animal> GetAnimals(string orderBy)
+    public async Task<IEnumerable<Animal>> GetAnimals(string orderBy)
     {
-        using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
-        con.Open();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
 
-        using var cmd = new SqlCommand();
+        await using var cmd = new SqlCommand();
         cmd.Connection = con;
 
         var commandText = $"SELECT Id, Name, Description, Category, Area FROM Animal ORDER BY {orderBy}";
         cmd.CommandText = commandText;
 
-        var dr = cmd.ExecuteReader();
+        var dr = await cmd.ExecuteReaderAsync();
         var animals = new List<Animal>();
 
-        while (dr.Read())
+        while (await dr.ReadAsync())
         {
             var animal = new Animal
             {
@@ -104,12 +104,12 @@ public class AnimalsRepository : IAnimalsRepository
         return animals;
     }
 
-    public int CreateAnimal(Animal animal)
+    public async Task<int> CreateAnimal(Animal animal)
     {
-        using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
-        con.Open();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
 
-        using var cmd = new SqlCommand();
+        await using var cmd = new SqlCommand();
         cmd.Connection = con;
         cmd.CommandText =
             "INSERT INTO Animal(Name, Description, Category, Area) VALUES(@Name, @Description, @Category, @Area)";
@@ -127,16 +127,16 @@ public class AnimalsRepository : IAnimalsRepository
         cmd.Parameters.AddWithValue("@Category", animal.Category);
         cmd.Parameters.AddWithValue("@Area", animal.Area);
 
-        var affectedCount = cmd.ExecuteNonQuery();
+        var affectedCount = await cmd.ExecuteNonQueryAsync();
         return affectedCount;
     }
 
-    public int UpdateAnimal(Animal animal)
+    public async Task<int> UpdateAnimal(Animal animal)
     {
-        using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
-        con.Open();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
 
-        using var cmd = new SqlCommand();
+        await using var cmd = new SqlCommand();
         cmd.Connection = con;
         cmd.CommandText =
             "UPDATE Animal SET Name = @Name, Description = @Description, Category = @Category, Area = @Area WHERE Id = @Id";
@@ -146,21 +146,21 @@ public class AnimalsRepository : IAnimalsRepository
         cmd.Parameters.AddWithValue("@Category", animal.Category);
         cmd.Parameters.AddWithValue("@Area", animal.Area);
 
-        var affectedCount = cmd.ExecuteNonQuery();
+        var affectedCount = await cmd.ExecuteNonQueryAsync();
         return affectedCount;
     }
 
-    public int DeleteAnimal(int id)
+    public async Task<int> DeleteAnimal(int id)
     {
-        using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
-        con.Open();
+        await using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await con.OpenAsync();
 
-        using var cmd = new SqlCommand();
+        await using var cmd = new SqlCommand();
         cmd.Connection = con;
         cmd.CommandText = "DELETE FROM Animal WHERE Id = @Id";
         cmd.Parameters.AddWithValue("@Id", id);
 
-        var affectedCount = cmd.ExecuteNonQuery();
+        var affectedCount = await cmd.ExecuteNonQueryAsync();
         return affectedCount;
     }
 }
