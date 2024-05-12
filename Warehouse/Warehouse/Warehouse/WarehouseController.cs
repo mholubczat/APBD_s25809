@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Warehouse;
@@ -13,18 +14,48 @@ public class WarehouseController(IWarehouseService warehouseService) : Controlle
         {
             return BadRequest(ModelState);
         }
-        
+
         if (await warehouseService.Validate(model) == false)
         {
             return BadRequest("Invalid request - product or warehouse does not exist in database");
         }
-        
-        var insertedId = await warehouseService.AddProduct(model);
-        if (insertedId == null)
+
+        int insertedId;
+        try
         {
-            return BadRequest("Order not found, or already completed");
+            insertedId = await warehouseService.AddProduct(model);
         }
-        
-        return Ok(insertedId.Value);
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(exception.Message); 
+        }
+
+        return Ok(insertedId);
+    }
+
+    [HttpPost("add-product-with-procedure")]
+    public async Task<IActionResult> AddProductWithProcedure(AddProductModel model)
+    {
+        if (ModelState.IsValid == false)
+        {
+            return BadRequest(ModelState);
+        }
+
+        int insertedId;
+
+        try
+        {
+            insertedId = await warehouseService.AddProductWithProcedure(model);
+        }
+        catch (SqlException exception)
+        {
+            return BadRequest(exception.Message);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(exception.Message); 
+        }
+
+        return Ok(insertedId);
     }
 }
