@@ -1,0 +1,6 @@
+@Trip_HostAddress = http://localhost:5005
+
+GET {{Trip_HostAddress}}/
+Accept: application/json
+
+###
