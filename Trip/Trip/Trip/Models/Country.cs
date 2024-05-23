@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Trip.Models;
 
-public partial class Country
+public sealed partial class Country
 {
-    public int IdCountry { get; set; }
+    [Key, Required] 
+    public int IdCountry { get; init; }
 
-    public string Name { get; set; } = null!;
+    [Required, MaxLength(120)]
+    public string Name { get; init; } = null!;
 
-    public virtual ICollection<Trip> IdTrips { get; set; } = new List<Trip>();
+    public ICollection<Trip> IdTrips { get; init; } = new List<Trip>();
 }

@@ -1,23 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Trip.Models;
 
-public partial class Trip
+public sealed partial class Trip
 {
-    public int IdTrip { get; set; }
+    [Key, Required]
+    public int IdTrip { get; init; }
 
-    public string Name { get; set; } = null!;
+    [Required, MaxLength(120)]
+    public string Name { get; init; } = null!;
 
-    public string Description { get; set; } = null!;
+    [Required, MaxLength(220)]
+    public string Description { get; init; } = null!;
 
-    public DateTime DateFrom { get; set; }
+    [Required]
+    public DateTime DateFrom { get; init; }
 
-    public DateTime DateTo { get; set; }
+    [Required]
+    public DateTime DateTo { get; init; }
 
-    public int MaxPeople { get; set; }
+    [Required]
+    public int MaxPeople { get; init; }
 
-    public virtual ICollection<ClientTrip> ClientTrips { get; set; } = new List<ClientTrip>();
+    public ICollection<ClientTrip> ClientTrips { get; init; } = new List<ClientTrip>();
 
-    public virtual ICollection<Country> IdCountries { get; set; } = new List<Country>();
+    public ICollection<Country> IdCountries { get; init; } = new List<Country>();
 }

@@ -1,19 +1,23 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Trip.Context;
 
 namespace Trip.Repositories;
 
 public interface ITripRepository
 {
-    
+    Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken);
 }
 
 public class TripRepository : ITripRepository
 {
     private readonly IConfiguration _configuration;
+    private readonly TripAppContext _appContext;
     
-    public TripRepository(IConfiguration configuration)
+    public TripRepository(IConfiguration configuration, TripAppContext appContext)
     {
         _configuration = configuration;
+        _appContext = appContext;
         Initialize();
     }
 
@@ -29,5 +33,15 @@ public class TripRepository : ITripRepository
                                     $"BEGIN {createFile.OpenText().ReadToEnd()} END;";
         createCommand.Connection = connection;
         createCommand.ExecuteNonQuery();
+    }
+
+    public async Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken)
+    {
+        var trips = await _appContext
+            .Trips
+            .OrderByDescending(trip => trip.DateFrom)
+            .ToListAsync(cancellationToken);
+
+        return trips;
     }
 }

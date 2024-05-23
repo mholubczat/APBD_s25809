@@ -3,13 +3,13 @@ using Trip.Models;
 
 namespace Trip.Context;
 
-public partial class S25809Context : DbContext
+public partial class TripAppContext : DbContext
 {
-    public S25809Context()
+    public TripAppContext()
     {
     }
 
-    public S25809Context(DbContextOptions<S25809Context> options)
+    public TripAppContext(DbContextOptions<TripAppContext> options)
         : base(options)
     {
     }
@@ -73,7 +73,7 @@ public partial class S25809Context : DbContext
             entity.HasMany(d => d.IdTrips).WithMany(p => p.IdCountries)
                 .UsingEntity<Dictionary<string, object>>(
                     "CountryTrip",
-                    r => r.HasOne<Trip>().WithMany()
+                    r => r.HasOne<Models.Trip>().WithMany()
                         .HasForeignKey("IdTrip")
                         .OnDelete(DeleteBehavior.ClientSetNull)
                         .HasConstraintName("Country_Trip_Trip"),

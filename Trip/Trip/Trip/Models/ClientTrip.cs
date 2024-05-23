@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Trip.Models;
 
-public partial class ClientTrip
+public sealed partial class ClientTrip
 {
-    public int IdClient { get; set; }
+    [ForeignKey(nameof(Client)), Required] 
+    public int IdClient { get; init; }
 
-    public int IdTrip { get; set; }
+    [ForeignKey(nameof(Trip)), Required]
+    public int IdTrip { get; init; }
 
-    public DateTime RegisteredAt { get; set; }
+    [Required]
+    public DateTime RegisteredAt { get; init; }
 
-    public DateTime? PaymentDate { get; set; }
+    public DateTime? PaymentDate { get; init; }
 
-    public virtual Client IdClientNavigation { get; set; } = null!;
-
-    public virtual Trip IdTripNavigation { get; set; } = null!;
+    public Client IdClientNavigation { get; init; } = null!;
+    
+    public Trip IdTripNavigation { get; init; } = null!;
 }

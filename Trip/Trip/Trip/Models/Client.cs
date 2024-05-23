@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Trip.Models;
 
-public partial class Client
+public sealed partial class Client
 {
-    public int IdClient { get; set; }
+    [Key, Required] 
+    public int IdClient { get; init; }
 
-    public string FirstName { get; set; } = null!;
+    [Required, MaxLength(120)]  
+    public string FirstName { get; init; } = null!;
 
-    public string LastName { get; set; } = null!;
+    [Required, MaxLength(120)]  
+    public string LastName { get; init; } = null!;
 
-    public string Email { get; set; } = null!;
+    [Required, MaxLength(120)]  
+    public string Email { get; init; } = null!;
 
-    public string Telephone { get; set; } = null!;
+    [Required, MaxLength(120)]  
+    public string Telephone { get; init; } = null!;
 
-    public string Pesel { get; set; } = null!;
+    [Required, MaxLength(120)] 
+    public string Pesel { get; init; } = null!;
 
-    public virtual ICollection<ClientTrip> ClientTrips { get; set; } = new List<ClientTrip>();
+    public ICollection<ClientTrip> ClientTrips { get; init; } = new List<ClientTrip>();
 }
