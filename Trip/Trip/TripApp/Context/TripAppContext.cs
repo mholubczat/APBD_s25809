@@ -33,7 +33,7 @@ public partial class TripAppContext : DbContext
 
             entity.ToTable("Client", "trip");
 
-            entity.Property(e => e.IdClient).ValueGeneratedNever();
+            entity.Property(e => e.IdClient).ValueGeneratedOnAdd();
             entity.Property(e => e.Email).HasMaxLength(120);
             entity.Property(e => e.FirstName).HasMaxLength(120);
             entity.Property(e => e.LastName).HasMaxLength(120);
@@ -92,7 +92,7 @@ public partial class TripAppContext : DbContext
         {
             entity.HasKey(e => e.IdTrip).HasName("Trip_pk");
 
-            entity.ToTable("Trip", "trip");
+            entity.ToTable("TripApp", "trip");
 
             entity.Property(e => e.IdTrip).ValueGeneratedNever();
             entity.Property(e => e.DateFrom).HasColumnType("datetime");

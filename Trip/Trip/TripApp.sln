@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trip", "Trip\Trip.csproj", "{A2C7C4A1-47E3-4DA3-8909-66956DAEF34F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripApp", "TripApp\TripApp.csproj", "{A2C7C4A1-47E3-4DA3-8909-66956DAEF34F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

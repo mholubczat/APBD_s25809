@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>false</InvariantGlobalization>
+        <RootNamespace>Trip</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Context\" />
-      <Folder Include="Models\" />
     </ItemGroup>
 
 </Project>

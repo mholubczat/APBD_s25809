@@ -5,22 +5,22 @@ namespace Trip.Models;
 public sealed partial class Trip
 {
     [Key, Required]
-    public int IdTrip { get; init; }
+    public required int IdTrip { get; init; }
 
     [Required, MaxLength(120)]
-    public string Name { get; init; } = null!;
+    public required string Name { get; init; }
 
     [Required, MaxLength(220)]
-    public string Description { get; init; } = null!;
+    public required string Description { get; init; }
 
     [Required]
-    public DateTime DateFrom { get; init; }
+    public required DateTime DateFrom { get; init; }
 
     [Required]
-    public DateTime DateTo { get; init; }
+    public required DateTime DateTo { get; init; }
 
     [Required]
-    public int MaxPeople { get; init; }
+    public required int MaxPeople { get; init; }
 
     public ICollection<ClientTrip> ClientTrips { get; init; } = new List<ClientTrip>();
 

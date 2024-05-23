@@ -6,13 +6,13 @@ namespace Trip.Models;
 public sealed partial class ClientTrip
 {
     [ForeignKey(nameof(Client)), Required] 
-    public int IdClient { get; init; }
+    public int IdClient => IdClientNavigation.IdClient;
 
-    [ForeignKey(nameof(Trip)), Required]
-    public int IdTrip { get; init; }
+    [ForeignKey(nameof(Trip)), Required] 
+    public int IdTrip => IdTripNavigation.IdTrip;
 
     [Required]
-    public DateTime RegisteredAt { get; init; }
+    public required DateTime RegisteredAt { get; init; }
 
     public DateTime? PaymentDate { get; init; }
 

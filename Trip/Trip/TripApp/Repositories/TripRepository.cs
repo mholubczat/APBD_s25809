@@ -1,11 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Trip.Context;
+using Trip.Models;
 
 namespace Trip.Repositories;
 
 public interface ITripRepository
 {
+    Task AssignClient(AssignClientDto dto, CancellationToken cancellationToken);
+    Task<Models.Trip> GetTrip(int idTrip, CancellationToken cancellationToken);
     Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken);
 }
 
@@ -33,6 +36,29 @@ public class TripRepository : ITripRepository
                                     $"BEGIN {createFile.OpenText().ReadToEnd()} END;";
         createCommand.Connection = connection;
         createCommand.ExecuteNonQuery();
+    }
+
+    public async Task AssignClient(AssignClientDto dto, CancellationToken cancellationToken)
+    {
+        var clientTrip = new ClientTrip
+        {
+            RegisteredAt = DateTime.Now,
+            PaymentDate = dto.PaymentDate,
+            IdClientNavigation = dto.Client,
+            IdTripNavigation = dto.Trip
+        };
+
+        _appContext.Add(clientTrip);
+        await _appContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<Models.Trip> GetTrip(int idTrip, CancellationToken cancellationToken)
+    {
+        var trip = await _appContext
+            .Trips
+            .SingleAsync(trip => trip.IdTrip == idTrip, cancellationToken);
+
+        return trip;
     }
 
     public async Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken)
