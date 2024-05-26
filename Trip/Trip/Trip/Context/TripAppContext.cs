@@ -14,13 +14,13 @@ public partial class TripAppContext : DbContext
     {
     }
 
-    public virtual DbSet<Client> Clients { get; set; }
+    public virtual DbSet<Client> Clients { get; init; }
 
-    public virtual DbSet<ClientTrip> ClientTrips { get; set; }
+    public virtual DbSet<ClientTrip> ClientTrips { get; init; }
 
-    public virtual DbSet<Country> Countries { get; set; }
+    public virtual DbSet<Country> Countries { get; init; }
 
-    public virtual DbSet<Models.Trip> Trips { get; set; }
+    public virtual DbSet<Models.Trip> Trips { get; init; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Data Source=db-mssql;Initial Catalog=s25809;Integrated Security=True;TrustServerCertificate=True;Connect Timeout=0;Encrypt=False");
@@ -50,12 +50,14 @@ public partial class TripAppContext : DbContext
             entity.Property(e => e.PaymentDate).HasColumnType("datetime");
             entity.Property(e => e.RegisteredAt).HasColumnType("datetime");
 
-            entity.HasOne(d => d.IdClientNavigation).WithMany(p => p.ClientTrips)
+            entity.HasOne(d => d.Client)
+                .WithMany(p => p.ClientTrips)
                 .HasForeignKey(d => d.IdClient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Table_5_Client");
 
-            entity.HasOne(d => d.IdTripNavigation).WithMany(p => p.ClientTrips)
+            entity.HasOne(d => d.Trip)
+                .WithMany(p => p.ClientTrips)
                 .HasForeignKey(d => d.IdTrip)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Table_5_Trip");
@@ -92,7 +94,7 @@ public partial class TripAppContext : DbContext
         {
             entity.HasKey(e => e.IdTrip).HasName("Trip_pk");
 
-            entity.ToTable("TripApp", "trip");
+            entity.ToTable("Trip", "trip");
 
             entity.Property(e => e.IdTrip).ValueGeneratedNever();
             entity.Property(e => e.DateFrom).HasColumnType("datetime");

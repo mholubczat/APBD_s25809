@@ -19,18 +19,23 @@ public class TripService(ITripRepository tripRepository, IClientService clientSe
 
     public async Task AssignClient(AssignClientDto dto, CancellationToken cancellationToken)
     {
-        await clientService.AddClient(dto.Client, cancellationToken);
-        ArgumentNullException.ThrowIfNull(dto.Client.IdClient);
+        var client = new Client(dto);
+        await clientService.TryAddClient(client, cancellationToken);
+        ArgumentNullException.ThrowIfNull(client.IdClient);
 
-        var isAlreadyAssigned = dto.Client.ClientTrips.Any(trip => trip.IdTrip == dto.IdTrip);
+        var isAlreadyAssigned = client.ClientTrips.Any(trip => trip.IdTrip == dto.IdTrip);
         if (isAlreadyAssigned)
         {
-            throw new Exception($"Client id {dto.Client.IdClient} is already assigned to the trip id {dto.IdTrip}");
+            throw new Exception($"Client id {client.IdClient} is already assigned to the trip id {dto.IdTrip}");
         }
 
-        dto.Trip = await GetTrip(dto.IdTrip, cancellationToken);
+        var trip = await GetTrip(dto.IdTrip, cancellationToken);
+        if (trip.Name != dto.TripName)
+        {
+            throw new Exception($"Trip name {dto.TripName} does not match the value retrieved from database {trip.Name}");
+        }
 
-        await tripRepository.AssignClient(dto, cancellationToken);
+        await tripRepository.AssignClient(client, trip, dto.PaymentDate, cancellationToken);
     }
 
     public async Task<Models.Trip> GetTrip(int idTrip, CancellationToken cancellationToken)

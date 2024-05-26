@@ -5,16 +5,16 @@ namespace Trip.Service;
 
 public interface IClientService
 {
-    public Task AddClient(Client client, CancellationToken cancellationToken);
+    public Task TryAddClient(Client client, CancellationToken cancellationToken);
     public Task<Client> GetClient(int idClient, CancellationToken cancellationToken);
     public Task DeleteClient(int idClient, CancellationToken cancellationToken);
 }
 
 public class ClientService(IClientRepository clientRepository) : IClientService
 {
-    public async Task AddClient(Client client, CancellationToken cancellationToken)
+    public async Task TryAddClient(Client client, CancellationToken cancellationToken)
     {
-        await clientRepository.AddClient(client, cancellationToken);
+        await clientRepository.TryAddClient(client, cancellationToken);
     }
 
     public async Task<Client> GetClient(int idClient, CancellationToken cancellationToken)

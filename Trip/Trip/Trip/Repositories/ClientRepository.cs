@@ -6,14 +6,14 @@ namespace Trip.Repositories;
 
 public interface IClientRepository
 {
-    Task AddClient(Client client, CancellationToken cancellationToken);
+    Task TryAddClient(Client client, CancellationToken cancellationToken);
     Task<Client> GetClient(int idClient, CancellationToken cancellationToken);
     Task DeleteClient(Client client, CancellationToken cancellationToken);
 }
 
 public class ClientRepository(TripAppContext tripAppContext) : IClientRepository
 {
-    public async Task AddClient(Client client, CancellationToken cancellationToken)
+    public async Task TryAddClient(Client client, CancellationToken cancellationToken)
     {
         var isAlreadyAdded = await tripAppContext.Clients.AnyAsync(existingClient => existingClient.Pesel == client.Pesel, cancellationToken);
         if (isAlreadyAdded)
