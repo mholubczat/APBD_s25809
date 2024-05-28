@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trip.Context;
+using Trip.DTOs;
 using Trip.Models;
 
 namespace Trip.Repositories;
@@ -8,7 +9,7 @@ public interface ITripRepository
 {
     Task AssignClient(Client client, Models.Trip trip, DateTime? paymentDate, CancellationToken cancellationToken);
     Task<Models.Trip> GetTrip(int idTrip, CancellationToken cancellationToken);
-    Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken);
+    Task<IList<GetTripsDto>> GetTrips(CancellationToken cancellationToken);
 }
 
 public class TripRepository(TripAppContext appContext) : ITripRepository
@@ -39,11 +40,30 @@ public class TripRepository(TripAppContext appContext) : ITripRepository
         return trip;
     }
 
-    public async Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken)
+    public async Task<IList<GetTripsDto>> GetTrips(CancellationToken cancellationToken)
     {
         var trips = await appContext
             .Trips
-            .Include(t => t.ClientTrips)
+            .Include(trip => trip.ClientTrips)
+            .ThenInclude(clientTrip => clientTrip.Client)
+            .Include(trip => trip.Countries)
+            .Select(trip => new GetTripsDto
+            {
+                Name = trip.Name,
+                Description = trip.Description,
+                DateFrom = trip.DateFrom,
+                DateTo = trip.DateTo,
+                MaxPeople = trip.MaxPeople,
+                Clients = trip.ClientTrips
+                    .Select(clientTrip =>
+                        new ClientData
+                        {
+                            FirstName = clientTrip.Client.FirstName,
+                            LastName = clientTrip.Client.LastName
+                        })
+                    .ToList(),
+                Countries = trip.Countries.Select(country => new CountryData { Name = country.Name }).ToList()
+            })
             .OrderByDescending(trip => trip.DateFrom)
             .ToListAsync(cancellationToken);
 

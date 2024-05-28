@@ -76,7 +76,7 @@ public partial class TripAppContext : DbContext
             entity.Property(e => e.IdCountry).ValueGeneratedNever();
             entity.Property(e => e.Name).HasMaxLength(120);
 
-            entity.HasMany(d => d.IdTrips).WithMany(p => p.IdCountries)
+            entity.HasMany(d => d.IdTrips).WithMany(p => p.Countries)
                 .UsingEntity<Dictionary<string, object>>(
                     "CountryTrip",
                     r => r.HasOne<Models.Trip>().WithMany()

@@ -24,5 +24,5 @@ public sealed partial class Trip
 
     public ICollection<ClientTrip> ClientTrips { get; init; } = new List<ClientTrip>();
 
-    public ICollection<Country> IdCountries { get; init; } = new List<Country>();
+    public ICollection<Country> Countries { get; init; } = new List<Country>();
 }

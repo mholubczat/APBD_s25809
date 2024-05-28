@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Trip.DTOs;
 
 namespace Trip.Models;
 

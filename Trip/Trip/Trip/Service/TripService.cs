@@ -1,4 +1,5 @@
-﻿using Trip.Models;
+﻿using Trip.DTOs;
+using Trip.Models;
 using Trip.Repositories;
 
 namespace Trip.Service;
@@ -6,13 +7,13 @@ namespace Trip.Service;
 public interface ITripService
 {
     Task<Models.Trip> GetTrip(int idTrip, CancellationToken cancellationToken);
-    Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken);
+    Task<IList<GetTripsDto>> GetTrips(CancellationToken cancellationToken);
     Task AssignClient(AssignClientDto dto, CancellationToken cancellationToken);
 }
 
 public class TripService(ITripRepository tripRepository, IClientService clientService) : ITripService
 {
-    public async Task<IList<Models.Trip>> GetTrips(CancellationToken cancellationToken)
+    public async Task<IList<GetTripsDto>> GetTrips(CancellationToken cancellationToken)
     {
         return await tripRepository.GetTrips(cancellationToken);
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Trip.DTOs;
 using Trip.Models;
 using Trip.Service;
 
