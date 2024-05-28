@@ -23,7 +23,9 @@ public class TripRepository(TripAppContext appContext) : ITripRepository
             Trip = trip
         };
 
-        appContext.Add(clientTrip);
+        appContext
+            .ClientTrips
+            .Add(clientTrip);
         await appContext.SaveChangesAsync(cancellationToken);
     }
 
@@ -31,6 +33,7 @@ public class TripRepository(TripAppContext appContext) : ITripRepository
     {
         var trip = await appContext
             .Trips
+            .Include(t => t.ClientTrips)
             .SingleAsync(trip => trip.IdTrip == idTrip, cancellationToken);
 
         return trip;
@@ -40,6 +43,7 @@ public class TripRepository(TripAppContext appContext) : ITripRepository
     {
         var trips = await appContext
             .Trips
+            .Include(t => t.ClientTrips)
             .OrderByDescending(trip => trip.DateFrom)
             .ToListAsync(cancellationToken);
 

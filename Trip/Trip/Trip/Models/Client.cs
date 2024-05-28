@@ -5,7 +5,7 @@ namespace Trip.Models;
 public sealed partial class Client
 {
     [Key, Required] 
-    public int IdClient { get; init; }
+    public int? IdClient { get; init; }
 
     [Required, MaxLength(120)]
     public string FirstName { get; init; } = null!;

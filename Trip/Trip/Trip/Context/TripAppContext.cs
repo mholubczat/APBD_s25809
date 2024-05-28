@@ -55,12 +55,16 @@ public partial class TripAppContext : DbContext
                 .HasForeignKey(d => d.IdClient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Table_5_Client");
+            entity.Property(e => e.IdClient)
+                .ValueGeneratedNever();
 
             entity.HasOne(d => d.Trip)
                 .WithMany(p => p.ClientTrips)
                 .HasForeignKey(d => d.IdTrip)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Table_5_Trip");
+            entity.Property(e => e.IdTrip)
+                .ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Country>(entity =>

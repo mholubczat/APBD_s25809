@@ -20,7 +20,7 @@ public class TripService(ITripRepository tripRepository, IClientService clientSe
     public async Task AssignClient(AssignClientDto dto, CancellationToken cancellationToken)
     {
         var client = new Client(dto);
-        await clientService.TryAddClient(client, cancellationToken);
+        client = await clientService.GetOrAddClient(client, cancellationToken);
         ArgumentNullException.ThrowIfNull(client.IdClient);
 
         var isAlreadyAssigned = client.ClientTrips.Any(trip => trip.IdTrip == dto.IdTrip);
@@ -33,6 +33,11 @@ public class TripService(ITripRepository tripRepository, IClientService clientSe
         if (trip.Name != dto.TripName)
         {
             throw new Exception($"Trip name {dto.TripName} does not match the value retrieved from database {trip.Name}");
+        }
+
+        if (trip.MaxPeople == trip.ClientTrips.Count)
+        {
+            throw new Exception($"Trip id {dto.IdTrip} is fully booked");
         }
 
         await tripRepository.AssignClient(client, trip, dto.PaymentDate, cancellationToken);
