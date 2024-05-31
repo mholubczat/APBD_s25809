@@ -15,7 +15,7 @@ public class ClientController(IClientService clientService) : ControllerBase
         }
         catch (Exception exception)
         {
-            BadRequest(exception.Message);
+            return BadRequest(exception.Message);
         }
 
         return NoContent();

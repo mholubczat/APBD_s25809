@@ -7,7 +7,7 @@ GO
 -- tables
 -- Table: Client
 CREATE TABLE trip.Client (
-    IdClient int  NOT NULL,
+    IdClient int  NOT NULL IDENTITY,
     FirstName nvarchar(120)  NOT NULL,
     LastName nvarchar(120)  NOT NULL,
     Email nvarchar(120)  NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE trip.Client_Trip (
 
 -- Table: Country
 CREATE TABLE trip.Country (
-    IdCountry int  NOT NULL,
+    IdCountry int  NOT NULL IDENTITY,
     Name nvarchar(120)  NOT NULL,
     CONSTRAINT Country_pk PRIMARY KEY  (IdCountry)
 );
@@ -41,7 +41,7 @@ CREATE TABLE trip.Country_Trip (
 
 -- Table: Trip
 CREATE TABLE trip.Trip (
-    IdTrip int  NOT NULL,
+    IdTrip int  NOT NULL IDENTITY,
     Name nvarchar(120)  NOT NULL,
     Description nvarchar(220)  NOT NULL,
     DateFrom datetime  NOT NULL,
