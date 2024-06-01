@@ -8,7 +8,7 @@ public class Perscription
     public int IdDoctor { get; set; }
     public int IdPatient { get; set; }
     public Doctor Doctor { get; set; } = null!;
-    /*public Patient Patient { get; set; } = null!;
+    public Patient Patient { get; set; } = null!;
 
-    public ICollection<PerscriptionMedicament> Medicaments = new List<PerscriptionMedicament>();*/
+    public ICollection<PerscriptionMedicament> Medicaments = new List<PerscriptionMedicament>();
 }

@@ -12,8 +12,8 @@ using Perscription.Context;
 namespace Perscription.Migrations
 {
     [DbContext(typeof(PerscriptionAppContext))]
-    [Migration("20240526165817_InitialMigration3")]
-    partial class InitialMigration3
+    [Migration("20240601135649_InitialMigration_Medicament")]
+    partial class InitialMigration_Medicament
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,62 @@ namespace Perscription.Migrations
                     b.ToTable("Doctor", "prsp");
                 });
 
+            modelBuilder.Entity("Perscription.Models.Medicament", b =>
+                {
+                    b.Property<int>("IdMedicament")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMedicament"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("IdMedicament")
+                        .HasName("PK_Medicament");
+
+                    b.ToTable("Medicament", "prsp");
+                });
+
+            modelBuilder.Entity("Perscription.Models.Patient", b =>
+                {
+                    b.Property<int>("IdPatient")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPatient"));
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("IdPatient")
+                        .HasName("PK_Patient");
+
+                    b.ToTable("Patient", "prsp");
+                });
+
             modelBuilder.Entity("Perscription.Models.Perscription", b =>
                 {
                     b.Property<int>("IdPerscription")
@@ -79,6 +135,8 @@ namespace Perscription.Migrations
 
                     b.HasIndex("IdDoctor");
 
+                    b.HasIndex("IdPatient");
+
                     b.ToTable("Perscription", "prsp");
                 });
 
@@ -89,10 +147,22 @@ namespace Perscription.Migrations
                         .HasForeignKey("IdDoctor")
                         .IsRequired();
 
+                    b.HasOne("Perscription.Models.Patient", "Patient")
+                        .WithMany("Perscriptions")
+                        .HasForeignKey("IdPatient")
+                        .IsRequired();
+
                     b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Perscription.Models.Doctor", b =>
+                {
+                    b.Navigation("Perscriptions");
+                });
+
+            modelBuilder.Entity("Perscription.Models.Patient", b =>
                 {
                     b.Navigation("Perscriptions");
                 });

@@ -5,7 +5,7 @@
 namespace Perscription.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration3 : Migration
+    public partial class InitialMigration_DoctorCorrected : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

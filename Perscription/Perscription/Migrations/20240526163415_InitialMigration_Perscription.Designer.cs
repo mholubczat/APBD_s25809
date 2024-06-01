@@ -12,8 +12,8 @@ using Perscription.Context;
 namespace Perscription.Migrations
 {
     [DbContext(typeof(PerscriptionAppContext))]
-    [Migration("20240526163415_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240526163415_InitialMigration_Perscription")]
+    partial class InitialMigration_Perscription
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

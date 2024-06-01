@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Perscription.Context;
 
@@ -11,9 +12,11 @@ using Perscription.Context;
 namespace Perscription.Migrations
 {
     [DbContext(typeof(PerscriptionAppContext))]
-    partial class PerscriptionAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240601140705_InitialMigration_PerscriptionMedicament")]
+    partial class InitialMigration_PerscriptionMedicament
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

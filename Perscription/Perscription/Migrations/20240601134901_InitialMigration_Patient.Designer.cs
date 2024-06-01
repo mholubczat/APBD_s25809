@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Perscription.Context;
 
@@ -11,9 +12,11 @@ using Perscription.Context;
 namespace Perscription.Migrations
 {
     [DbContext(typeof(PerscriptionAppContext))]
-    partial class PerscriptionAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240601134901_InitialMigration_Patient")]
+    partial class InitialMigration_Patient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,35 +52,6 @@ namespace Perscription.Migrations
                         .HasName("PK_Doctor");
 
                     b.ToTable("Doctor", "prsp");
-                });
-
-            modelBuilder.Entity("Perscription.Models.Medicament", b =>
-                {
-                    b.Property<int>("IdMedicament")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMedicament"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("IdMedicament")
-                        .HasName("PK_Medicament");
-
-                    b.ToTable("Medicament", "prsp");
                 });
 
             modelBuilder.Entity("Perscription.Models.Patient", b =>
@@ -137,30 +111,6 @@ namespace Perscription.Migrations
                     b.ToTable("Perscription", "prsp");
                 });
 
-            modelBuilder.Entity("Perscription.Models.PerscriptionMedicament", b =>
-                {
-                    b.Property<int>("IdPerscription")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdMedicament")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("Dose")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdPerscription", "IdMedicament")
-                        .HasName("PK_Perscription_Medicament");
-
-                    b.HasIndex("IdMedicament");
-
-                    b.ToTable("PerscriptionMedicament", "prsp");
-                });
-
             modelBuilder.Entity("Perscription.Models.Perscription", b =>
                 {
                     b.HasOne("Perscription.Models.Doctor", "Doctor")
@@ -178,29 +128,7 @@ namespace Perscription.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("Perscription.Models.PerscriptionMedicament", b =>
-                {
-                    b.HasOne("Perscription.Models.Medicament", "Medicament")
-                        .WithMany("Perscriptions")
-                        .HasForeignKey("IdMedicament")
-                        .IsRequired();
-
-                    b.HasOne("Perscription.Models.Perscription", "Perscription")
-                        .WithMany("Medicaments")
-                        .HasForeignKey("IdPerscription")
-                        .IsRequired();
-
-                    b.Navigation("Medicament");
-
-                    b.Navigation("Perscription");
-                });
-
             modelBuilder.Entity("Perscription.Models.Doctor", b =>
-                {
-                    b.Navigation("Perscriptions");
-                });
-
-            modelBuilder.Entity("Perscription.Models.Medicament", b =>
                 {
                     b.Navigation("Perscriptions");
                 });
@@ -208,11 +136,6 @@ namespace Perscription.Migrations
             modelBuilder.Entity("Perscription.Models.Patient", b =>
                 {
                     b.Navigation("Perscriptions");
-                });
-
-            modelBuilder.Entity("Perscription.Models.Perscription", b =>
-                {
-                    b.Navigation("Medicaments");
                 });
 #pragma warning restore 612, 618
         }
