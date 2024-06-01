@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Perscription.Context;
+using Prescription.Context;
 
 #nullable disable
 
-namespace Perscription.Migrations
+namespace Prescription.Migrations
 {
-    [DbContext(typeof(PerscriptionAppContext))]
-    [Migration("20240526163415_InitialMigration_Perscription")]
-    partial class InitialMigration_Perscription
+    [DbContext(typeof(PrescriptionAppContext))]
+    [Migration("20240526163415_InitialMigration_Prescription")]
+    partial class InitialMigration_Prescription
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,13 @@ namespace Perscription.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Perscription.Models.Perscription", b =>
+            modelBuilder.Entity("Prescription.Models.Prescription", b =>
                 {
-                    b.Property<int>("IdPerscription")
+                    b.Property<int>("IdPrescription")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPerscription"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPrescription"));
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -45,10 +45,10 @@ namespace Perscription.Migrations
                     b.Property<int>("IdPatient")
                         .HasColumnType("int");
 
-                    b.HasKey("IdPerscription")
-                        .HasName("PK_Perscription");
+                    b.HasKey("IdPrescription")
+                        .HasName("PK_Prescription");
 
-                    b.ToTable("Perscription", "prsp");
+                    b.ToTable("Prescription", "prsp");
                 });
 #pragma warning restore 612, 618
         }

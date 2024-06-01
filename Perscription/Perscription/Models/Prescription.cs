@@ -1,6 +1,6 @@
-namespace Perscription.Models;
+namespace Prescription.Models;
 
-public class Perscription
+public class Prescription
 {
     public int IdPerscription { get; set; }
     public DateTime Date { get; set; }

@@ -1,11 +1,11 @@
-namespace Perscription.Models;
+namespace Prescription.Models;
 
-public class PerscriptionMedicament
+public class PrescriptionMedicament
 {
     public int IdMedicament { get; set; }
-    public int IdPerscription { get; set; }
+    public int IdPrescription { get; set; }
     public Medicament Medicament { get; set; }
-    public Perscription Perscription { get; set; }
+    public Prescription Prescription { get; set; }
     public int? Dose { get; set; }
     public string Details { get; set; }
 }

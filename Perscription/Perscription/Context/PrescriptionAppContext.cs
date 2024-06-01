@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Perscription.Models;
+using Prescription.Models;
 
-namespace Perscription.Context;
+namespace Prescription.Context;
 
 public class PerscriptionAppContext : DbContext
 {
@@ -15,17 +15,23 @@ public class PerscriptionAppContext : DbContext
     {
     }
 
-    public DbSet<Models.Perscription> Perscriptions { get; init; }
+    public DbSet<Models.Prescription> Perscriptions { get; init; }
+    public DbSet<Doctor> Doctors { get; init; }
+    public DbSet<Medicament> Medicaments { get; init; }
+    public DbSet<Patient> Patients { get; init; }
+    public DbSet<PerscriptionMedicament> PerscriptionMedicaments { get; init; }
+
+        
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Models.Perscription>(entity =>
+        modelBuilder.Entity<Models.Prescription>(entity =>
             {
-                entity.HasKey(e => e.IdPerscription).HasName("PK_Perscription");
+                entity.HasKey(e => e.IdPrescription).HasName("PK_Perscription");
 
-                entity.ToTable(nameof(Models.Perscription), Schema);
+                entity.ToTable(nameof(Models.Prescription), Schema);
 
-                entity.Property(e => e.IdPerscription).ValueGeneratedOnAdd();
+                entity.Property(e => e.IdPrescription).ValueGeneratedOnAdd();
                 entity.Property(e => e.Date);
                 entity.Property(e => e.DueDate);
                 entity.HasOne(e => e.Doctor)

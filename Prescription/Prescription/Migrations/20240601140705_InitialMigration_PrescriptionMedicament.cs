@@ -2,45 +2,45 @@
 
 #nullable disable
 
-namespace Perscription.Migrations
+namespace Prescription.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration_PerscriptionMedicament : Migration
+    public partial class InitialMigration_PrescriptionMedicament : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PerscriptionMedicament",
+                name: "PrescriptionMedicament",
                 schema: "prsp",
                 columns: table => new
                 {
                     IdMedicament = table.Column<int>(type: "int", nullable: false),
-                    IdPerscription = table.Column<int>(type: "int", nullable: false),
+                    IdPrescription = table.Column<int>(type: "int", nullable: false),
                     Dose = table.Column<int>(type: "int", nullable: true),
                     Details = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Perscription_Medicament", x => new { x.IdPerscription, x.IdMedicament });
+                    table.PrimaryKey("PK_Prescription_Medicament", x => new { x.IdPrescription, x.IdMedicament });
                     table.ForeignKey(
-                        name: "FK_PerscriptionMedicament_Medicament_IdMedicament",
+                        name: "FK_PrescriptionMedicament_Medicament_IdMedicament",
                         column: x => x.IdMedicament,
                         principalSchema: "prsp",
                         principalTable: "Medicament",
                         principalColumn: "IdMedicament");
                     table.ForeignKey(
-                        name: "FK_PerscriptionMedicament_Perscription_IdPerscription",
-                        column: x => x.IdPerscription,
+                        name: "FK_PrescriptionMedicament_Prescription_IdPrescription",
+                        column: x => x.IdPrescription,
                         principalSchema: "prsp",
-                        principalTable: "Perscription",
-                        principalColumn: "IdPerscription");
+                        principalTable: "Prescription",
+                        principalColumn: "IdPrescription");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PerscriptionMedicament_IdMedicament",
+                name: "IX_PrescriptionMedicament_IdMedicament",
                 schema: "prsp",
-                table: "PerscriptionMedicament",
+                table: "PrescriptionMedicament",
                 column: "IdMedicament");
         }
 
@@ -48,7 +48,7 @@ namespace Perscription.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PerscriptionMedicament",
+                name: "PrescriptionMedicament",
                 schema: "prsp");
         }
     }
