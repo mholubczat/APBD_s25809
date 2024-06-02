@@ -1,11 +1,13 @@
+using Prescription.DTOs;
+
 namespace Prescription.Models;
 
-public class Patient
+public class Patient(PatientData patientData)
 {
-    public int IdPatient { get; set; }
-    public string FirstName { get; set; } = null!;
-    public string LastName { get; set; } = null!;
-    public DateTime BirthDate { get; set; }
+    public int IdPatient { get; init; }
+    public string FirstName { get; init; } = patientData.FirstName;
+    public string LastName { get; init; } = patientData.LastName;
+    public DateTime BirthDate { get; init; } = patientData.BirthDate;
 
     public ICollection<Prescription> Prescriptions = new List<Prescription>();
 }

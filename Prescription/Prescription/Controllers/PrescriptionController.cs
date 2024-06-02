@@ -5,7 +5,7 @@ using Prescription.Services;
 namespace Prescription.Controllers;
 
 [ApiController]
-public class Prescription(IMedicamentService medicamentService) : ControllerBase
+public class PrescriptionController(IPrescriptionService prescriptionService) : ControllerBase
 {
     [Route("{idDoctor:int}/prescribe")]
     public async Task<IActionResult> Prescribe(int idDoctor, PrescribeDto dto, CancellationToken cancellationToken)
@@ -18,8 +18,7 @@ public class Prescription(IMedicamentService medicamentService) : ControllerBase
 
         try
         {
-            await medicamentService.GetMedicamentIds(
-                dto.PrescriptionDetails.Select(detail => detail.MedicamentName).ToList(), cancellationToken);
+            await prescriptionService.AddPrescription(idDoctor, dto, cancellationToken);
         }
         catch (InvalidOperationException exception)
         {

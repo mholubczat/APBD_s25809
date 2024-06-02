@@ -2,13 +2,13 @@ namespace Prescription.Models;
 
 public class Prescription
 {
-    public int IdPrescription { get; set; }
-    public DateTime Date { get; set; }
-    public DateTime DueDate { get; set; }
-    public int IdDoctor { get; set; }
-    public int IdPatient { get; set; }
-    public Doctor Doctor { get; set; } = null!;
-    public Patient Patient { get; set; } = null!;
+    public int IdPrescription { get; init; }
+    public DateTime Date { get; init; }
+    public DateTime DueDate { get; init; }
+    public int IdDoctor { get; init; }
+    public int IdPatient { get; init; }
+    public Doctor Doctor { get; init; } = null!;
+    public Patient Patient { get; init; } = null!;
 
     public ICollection<PrescriptionMedicament> Medicaments = new List<PrescriptionMedicament>();
 }
