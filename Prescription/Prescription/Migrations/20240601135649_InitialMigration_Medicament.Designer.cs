@@ -159,7 +159,7 @@ namespace Prescription.Migrations
 
             modelBuilder.Entity("Prescription.Models.Doctor", b =>
                 {
-                    b.Navigation("Prescription");
+                    b.Navigation("Prescriptions");
                 });
 
             modelBuilder.Entity("Prescription.Models.Patient", b =>

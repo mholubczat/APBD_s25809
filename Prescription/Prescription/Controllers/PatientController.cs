@@ -4,12 +4,12 @@ using Prescription.Services;
 
 namespace Prescription.Controllers;
 
-[ApiController]
+[Route("/api/patient"), ApiController]
 public class PatientController(IPatientService patientService) : ControllerBase
 {
     private readonly IPatientService _patientService = patientService;
 
-    [Route("getPatient/{idPatient:int}")]
+    [HttpGet("{idPatient:int}")]
     public async Task<IActionResult> GetPatient(int idPatient, CancellationToken cancellationToken)
     {
         try
@@ -35,7 +35,7 @@ public class PatientController(IPatientService patientService) : ControllerBase
                                 Dose = prescriptionMedicament.Dose,
                                 Details = prescriptionMedicament.Details
                             }
-                        ),
+                        ).ToList(),
                         Doctor = new DoctorData
                         {
                             IdDoctor = prescription.Doctor.IdDoctor,
@@ -44,6 +44,7 @@ public class PatientController(IPatientService patientService) : ControllerBase
                             Email = prescription.Doctor.Email
                         }
                     })
+                    .OrderBy(data => data.DueDate)
                     .ToList()
             };
 

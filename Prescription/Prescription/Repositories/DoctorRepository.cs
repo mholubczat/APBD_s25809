@@ -11,8 +11,10 @@ public interface IDoctorRepository
 
 public class DoctorRepository(PrescriptionAppContext context) : IDoctorRepository
 {
+    private readonly PrescriptionAppContext _context = context;
+
     public async Task<Doctor> GetDoctor(int idDoctor, CancellationToken cancellationToken)
     {
-        return await context.Doctors.SingleAsync(doctor => doctor.IdDoctor == idDoctor, cancellationToken);
+        return await _context.Doctors.SingleAsync(doctor => doctor.IdDoctor == idDoctor, cancellationToken);
     }
 }

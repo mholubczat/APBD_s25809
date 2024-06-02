@@ -11,9 +11,11 @@ public interface IMedicamentRepository
 
 public class MedicamentRepository(PrescriptionAppContext context) : IMedicamentRepository
 {
+    private readonly PrescriptionAppContext _context = context;
+
     public async Task<Medicament> GetMedicament(string name, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
-        return await context.Medicaments.SingleAsync(medicament => medicament.Name == name, cancellationToken);
+        return await _context.Medicaments.SingleAsync(medicament => medicament.Name == name, cancellationToken);
     }
 }

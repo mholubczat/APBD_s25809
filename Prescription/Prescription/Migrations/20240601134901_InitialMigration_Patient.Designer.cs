@@ -135,7 +135,7 @@ namespace Prescription.Migrations
 
             modelBuilder.Entity("Prescription.Models.Patient", b =>
                 {
-                    b.Navigation("Prescription");
+                    b.Navigation("Prescriptions");
                 });
 #pragma warning restore 612, 618
         }

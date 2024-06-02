@@ -4,12 +4,12 @@ using Prescription.Services;
 
 namespace Prescription.Controllers;
 
-[ApiController]
+[Route("/api"), ApiController]
 public class PrescriptionController(IPrescriptionService prescriptionService) : ControllerBase
 {
     private readonly IPrescriptionService _prescriptionService = prescriptionService;
 
-    [Route("{idDoctor:int}/prescribe")]
+    [HttpPost("{idDoctor:int}/prescribe")]
     public async Task<IActionResult> Prescribe(int idDoctor, PrescribeDto dto, CancellationToken cancellationToken)
     {
         var validationResult = Validate(dto);

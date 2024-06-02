@@ -13,9 +13,11 @@ public interface IPatientRepository
 
 public class PatientRepository(PrescriptionAppContext context) : IPatientRepository
 {
+    private readonly PrescriptionAppContext _context = context;
+
     public async Task<Patient> GetOrAddPatient(PatientData patientData, CancellationToken cancellationToken)
     {
-        var existingPatient = await context.Patients.FirstOrDefaultAsync(
+        var existingPatient = await _context.Patients.FirstOrDefaultAsync(
             patient =>
                 patient.BirthDate == patientData.BirthDate &&
                 patient.LastName == patientData.LastName &&
@@ -28,15 +30,15 @@ public class PatientRepository(PrescriptionAppContext context) : IPatientReposit
         }
 
         var newPatient = new Patient(patientData);
-        await context.Patients.AddAsync(newPatient, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        await _context.Patients.AddAsync(newPatient, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return newPatient;
     }
 
     public async Task<Patient> GetPatient(int idPatient, CancellationToken cancellationToken)
     {
-        return await context.Patients
+        return await _context.Patients
             .Include(patient => patient.Prescriptions)
             .ThenInclude(prescription => prescription.Medicaments)
             .ThenInclude(prescriptionMedicament => prescriptionMedicament.Medicament)

@@ -156,7 +156,7 @@ namespace Prescription.Migrations
                     b.Property<int?>("Dose")
                         .HasColumnType("int");
 
-                    b.HasKey("IdPrescriptionn", "IdMedicament")
+                    b.HasKey("IdPrescription", "IdMedicament")
                         .HasName("PK_Prescription_Medicament");
 
                     b.HasIndex("IdMedicament");

@@ -14,7 +14,7 @@ public class PrescriptionData
     public int IdPrescription { get; init; }
     public DateTime Date { get; init; }
     public DateTime DueDate { get; init; }
-    public IEnumerable<MedicamentData> Medicaments = new List<MedicamentData>();
+    public ICollection<MedicamentData> Medicaments { get; init; } = null!;
     public DoctorData Doctor { get; init; } = null!;
 }
 
