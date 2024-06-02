@@ -4,9 +4,9 @@ namespace Prescription.Models;
 
 public class Patient
 {
-    public int IdPatient { get; init; }
-    public string FirstName { get; init; }
-    public string LastName { get; init; }
+    public int IdPatient { get; set; }
+    public string FirstName { get; init; } = null!;
+    public string LastName { get; init; } = null!;
     public DateTime BirthDate { get; init; }
 
     public ICollection<Prescription> Prescriptions = new List<Prescription>();

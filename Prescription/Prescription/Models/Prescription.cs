@@ -2,7 +2,7 @@ namespace Prescription.Models;
 
 public class Prescription
 {
-    public int IdPrescription { get; init; }
+    public int IdPrescription { get; set; }
     public DateTime Date { get; init; }
     public DateTime DueDate { get; init; }
     public int IdDoctor { get; init; }
