@@ -10,8 +10,10 @@ public interface IDoctorService
 
 public class DoctorService(IDoctorRepository doctorRepository) : IDoctorService
 {
+    private readonly IDoctorRepository _doctorRepository = doctorRepository;
+
     public async Task<Doctor> GetDoctor(int idDoctor, CancellationToken cancellationToken)
     {
-        return await doctorRepository.GetDoctor(idDoctor, cancellationToken);
+        return await _doctorRepository.GetDoctor(idDoctor, cancellationToken);
     }
 }

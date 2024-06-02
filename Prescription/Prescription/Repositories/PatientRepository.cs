@@ -8,6 +8,7 @@ namespace Prescription.Repositories;
 public interface IPatientRepository
 {
     Task<Patient> GetOrAddPatient(PatientData patientData, CancellationToken cancellationToken);
+    Task<Patient> GetPatient(int idPatient, CancellationToken cancellationToken);
 }
 
 public class PatientRepository(PrescriptionAppContext context) : IPatientRepository
@@ -31,5 +32,16 @@ public class PatientRepository(PrescriptionAppContext context) : IPatientReposit
         await context.SaveChangesAsync(cancellationToken);
 
         return newPatient;
+    }
+
+    public async Task<Patient> GetPatient(int idPatient, CancellationToken cancellationToken)
+    {
+        return await context.Patients
+            .Include(patient => patient.Prescriptions)
+            .ThenInclude(prescription => prescription.Medicaments)
+            .ThenInclude(prescriptionMedicament => prescriptionMedicament.Medicament)
+            .Include(patient => patient.Prescriptions)
+            .ThenInclude(prescription => prescription.Doctor)
+            .SingleAsync(patient => patient.IdPatient == idPatient, cancellationToken);
     }
 }

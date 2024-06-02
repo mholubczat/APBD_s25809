@@ -15,13 +15,18 @@ public class PrescriptionService(
     IMedicamentService medicamentService, 
     IPatientService patientService) : IPrescriptionService
 {
+    private readonly IPrescriptionRepository _prescriptionRepository = prescriptionRepository;
+    private readonly IDoctorService _doctorService = doctorService;
+    private readonly IMedicamentService _medicamentService = medicamentService;
+    private readonly IPatientService _patientService = patientService;
+
     public async Task AddPrescription(int idDoctor, PrescribeDto dto, CancellationToken cancellationToken)
     {
-        var getDoctorTask = doctorService.GetDoctor(idDoctor, cancellationToken);
+        var getDoctorTask = _doctorService.GetDoctor(idDoctor, cancellationToken);
         var getMedicamentTasks = dto.PrescriptionDetails
-            .Select(detail => medicamentService.GetMedicament(detail.MedicamentName, cancellationToken))
+            .Select(detail => _medicamentService.GetMedicament(detail.MedicamentName, cancellationToken))
             .ToList();
-        var getPatientTask = patientService.GetOrAddPatient(dto.PatientData, cancellationToken);
+        var getPatientTask = _patientService.GetOrAddPatient(dto.PatientData, cancellationToken);
 
         var readFromDatabase = getMedicamentTasks.ToList<Task>();
         readFromDatabase.Add(getDoctorTask);
@@ -36,7 +41,7 @@ public class PrescriptionService(
             Patient = getPatientTask.Result
         };
 
-        await prescriptionRepository.AddPrescription(prescription, cancellationToken);
+        await _prescriptionRepository.AddPrescription(prescription, cancellationToken);
         foreach (var medicament in getMedicamentTasks.Select(task => task.Result))
         {
 
@@ -48,7 +53,7 @@ public class PrescriptionService(
                 Dose = detail.Dose,
                 Details = detail.Details
             };
-            await prescriptionRepository.AddPrescriptionMedicament(prescriptionMedicament, cancellationToken);
+            await _prescriptionRepository.AddPrescriptionMedicament(prescriptionMedicament, cancellationToken);
         }
     }
 }

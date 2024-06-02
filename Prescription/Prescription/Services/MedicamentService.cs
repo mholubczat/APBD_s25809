@@ -10,9 +10,11 @@ public interface IMedicamentService
 
 public class MedicamentService(IMedicamentRepository medicamentRepository) : IMedicamentService
 {
+    private readonly IMedicamentRepository _medicamentRepository = medicamentRepository;
+
     public async Task<Medicament> GetMedicament(string name, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
-        return await medicamentRepository.GetMedicament(name, cancellationToken);
+        return await _medicamentRepository.GetMedicament(name, cancellationToken);
     }
 }
