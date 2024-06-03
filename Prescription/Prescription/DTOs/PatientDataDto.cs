@@ -1,7 +1,9 @@
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace Prescription.DTOs;
 
 public class PatientDataDto
 {
+    // ReSharper disable once UnusedMember.Local
     private int IdPatient { get; set; }
     public string FirstName { get; init; } = null!;
     public string LastName { get; init; } = null!;

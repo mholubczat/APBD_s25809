@@ -15,6 +15,13 @@ public class DoctorRepository(PrescriptionAppContext context) : IDoctorRepositor
 
     public async Task<Doctor> GetDoctor(int idDoctor, CancellationToken cancellationToken)
     {
-        return await _context.Doctors.SingleAsync(doctor => doctor.IdDoctor == idDoctor, cancellationToken);
+        try
+        {
+            return await _context.Doctors.SingleAsync(doctor => doctor.IdDoctor == idDoctor, cancellationToken);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Doctor id {idDoctor} not found");
+        }
     }
 }

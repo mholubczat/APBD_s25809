@@ -38,12 +38,19 @@ public class PatientRepository(PrescriptionAppContext context) : IPatientReposit
 
     public async Task<Patient> GetPatient(int idPatient, CancellationToken cancellationToken)
     {
-        return await _context.Patients
-            .Include(patient => patient.Prescriptions)
-            .ThenInclude(prescription => prescription.Medicaments)
-            .ThenInclude(prescriptionMedicament => prescriptionMedicament.Medicament)
-            .Include(patient => patient.Prescriptions)
-            .ThenInclude(prescription => prescription.Doctor)
-            .SingleAsync(patient => patient.IdPatient == idPatient, cancellationToken);
+        try
+        {
+            return await _context.Patients
+                .Include(patient => patient.Prescriptions)
+                .ThenInclude(prescription => prescription.Medicaments)
+                .ThenInclude(prescriptionMedicament => prescriptionMedicament.Medicament)
+                .Include(patient => patient.Prescriptions)
+                .ThenInclude(prescription => prescription.Doctor)
+                .SingleAsync(patient => patient.IdPatient == idPatient, cancellationToken);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Patient id {idPatient} not found");
+        }
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -30,7 +29,7 @@ public class PrescriptionTests
         _doctorRepositoryMock = new Mock<IDoctorRepository>();
         _doctorRepositoryMock
             .Setup(repo => repo.GetDoctor(It.Is<int>(idDoctor => idDoctor == 0), It.IsAny<CancellationToken>()))
-            .Throws(new InvalidOperationException("Sequence contains no elements, Doctor"));
+            .Throws(new InvalidOperationException("Doctor id 0 not found"));
         _doctorRepositoryMock
             .Setup(repo => repo.GetDoctor(It.Is<int>(idDoctor => idDoctor != 0), It.IsAny<CancellationToken>()))
             .ReturnsAsync((int idDoctor, CancellationToken _) => new Doctor
@@ -41,7 +40,7 @@ public class PrescriptionTests
         _medicamentRepositoryMock = new Mock<IMedicamentRepository>();
         _medicamentRepositoryMock
             .Setup(repo => repo.GetMedicament(It.Is<string>(name => name == "NonExistentMedicament"), It.IsAny<CancellationToken>()))
-            .Throws(new InvalidOperationException("Sequence contains no elements, NonExistentMedicament"));
+            .Throws(new InvalidOperationException("Medicament NonExistentMedicament not found"));
         _medicamentRepositoryMock
             .Setup(repo => repo.GetMedicament(It.Is<string>(name => name != "NonExistentMedicament"), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string name, CancellationToken _) => new Medicament
@@ -124,7 +123,7 @@ public class PrescriptionTests
         
         //Assert
         Assert.That(result is BadRequestObjectResult);
-        Assert.That("Sequence contains no elements, Doctor", Is.EqualTo(((BadRequestObjectResult)result).Value));
+        Assert.That("Doctor id 0 not found", Is.EqualTo(((BadRequestObjectResult)result).Value));
 
     }
 
@@ -157,7 +156,7 @@ public class PrescriptionTests
             
         //Assert
         Assert.That(result is BadRequestObjectResult);
-        Assert.That("Sequence contains no elements, NonExistentMedicament", Is.EqualTo(((BadRequestObjectResult)result).Value));
+        Assert.That("Medicament NonExistentMedicament not found", Is.EqualTo(((BadRequestObjectResult)result).Value));
 
     }
 

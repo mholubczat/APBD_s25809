@@ -16,6 +16,13 @@ public class MedicamentRepository(PrescriptionAppContext context) : IMedicamentR
     public async Task<Medicament> GetMedicament(string name, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
-        return await _context.Medicaments.SingleAsync(medicament => medicament.Name == name, cancellationToken);
+        try
+        {
+            return await _context.Medicaments.SingleAsync(medicament => medicament.Name == name, cancellationToken);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException($"Medicament {name} not found");
+        }
     }
 }
